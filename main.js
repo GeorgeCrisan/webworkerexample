@@ -3,23 +3,27 @@ const second = document.querySelector('#number2');
 
 const result = document.querySelector('.result');
 
+
+
 if (window.Worker) {
-	const myWorker = new Worker("worker.js");
+  const wW = new Worker("worker.js");
 
-	first.onchange = function() {
-	  myWorker.postMessage([first.value, second.value]);
-	  console.log('Message posted to worker');
-	}
+  first.onchange = () => {
+    wW.postMessage([first.value, second.value]);
+    console.log('meesage sent', [first.value, second.value]);
+  };
 
-	second.onchange = function() {
-	  myWorker.postMessage([first.value, second.value]);
-	  console.log('Message posted to worker');
-	}
+  second.onchange = () => {
+    wW.postMessage([first.value, second.value]);
+    console.log('message sent from second value');
+  }
 
-	myWorker.onmessage = function(e) {
-		result.textContent = e.data;
-		console.log('Message received from worker');
-	}
+  wW.onmessage = e => {
+    console.log(e);
+    result.innerHTML = "<div>" + e.data + "</div>";
+  };
+
 } else {
-	console.log('Your browser doesn\'t support web workers.')
+  console.log('No web worker supported');
 }
+
